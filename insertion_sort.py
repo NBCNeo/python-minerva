@@ -4,25 +4,13 @@ start_time = time.time()
 
 
 def insertion_sort(l):
-    steps = {'c1': 1, 'c2': 0, 'c3': 0, 'c4': 1, 'c5': 0, 'c6': 0, 'c7': 0}
-
-    for j in range(1, len(l)):  # c1
-        k = l[j]  # c2
-        i = 0  # c3
-        steps["c1"] += 1
-        steps["c2"] += 1
-        steps["c3"] += 1
-        while k > l[i] and i < j:  # c4
-            i += 1  # c5
-            steps["c4"] += 1
-            steps["c5"] += 1
-        l.insert(i, k)  # c6
-        l.pop(j+1)  # c7
-        steps["c6"] += 1
-        steps["c7"] += 1
-    s = ''.join([str(steps[e])+e+' + ' for e in steps])[:-3]
-    print(s)
-    return (len(l), sum([steps[e] for e in steps]))
+    for j in range(1, len(l)):
+        k = l[j]
+        i = 0
+        while k > l[i] and i < j:
+            i += 1
+        l.insert(i, k)
+        l.pop(j+1) 
 
 
 def bubbleSort(alist):
