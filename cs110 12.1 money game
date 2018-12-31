@@ -1,0 +1,13 @@
+def money_game(c):
+    n = len(c)
+    bright = [c[0]]
+    for i in range(1,n):
+        new_rightb = [c[i]]
+        for j in range(1,i+1):
+            new_rightb.append(max(c[i-j]+sum(c[i-j+1:i+1])-new_rightb[j-1],c[i]+sum(c[i-j:i])-bright[j-1]))
+        bright = new_rightb[:]
+    return bright[-1]
+
+c = [3,8,4]
+
+print(money_game(c))

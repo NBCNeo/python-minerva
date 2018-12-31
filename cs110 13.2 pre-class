@@ -1,0 +1,19 @@
+def lecture_hall(s,f):
+    n = len(s)
+    hall_assignment = []
+    k = 0
+    hall = 0
+    for i in range(n):
+        if f[k] > s[i]:
+            hall_assignment.append(hall)
+            hall +=1
+        else:
+            k=i
+            hall=0
+            hall_assignment.append(hall)
+
+    return hall_assignment
+
+s = [0,2,4,11,16]
+f = [6,9,13,15,20]
+print(lecture_hall(s,f))

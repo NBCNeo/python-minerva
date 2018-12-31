@@ -1,0 +1,23 @@
+def extended_bottom_up_cut_rod(p,n):
+    r = list(range(n))
+    s = list(range(n))
+    for j in range(n):
+        q = -float('inf')
+        for i in range(j+1):
+            if q < p[i] + r[j-i]:
+                q=p[i]+r[j-i]
+                s[j]=i
+        r[j]=q
+    return [r,s]
+
+def print_cut_rod_solution(p,n):
+    s = extended_bottom_up_cut_rod(p,n)[1]
+    k = n
+    while k>0:
+        print(s[k-1])
+        k = k - s[k-1] - 1
+        print('k',k)
+
+p = [1,5,8,9,10,17,17,20,24,30,32,36,36,38]
+
+print_cut_rod_solution(p,1)

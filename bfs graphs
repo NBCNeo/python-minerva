@@ -1,0 +1,113 @@
+class Node:
+
+    BLACK = 'B'
+    GRAY = 'G'
+    WHITE = 'W'
+
+    def __init__(self, name, adj_list=None, weighted_adj_list=None):
+        self.name = name
+        self.color = Node.WHITE
+        self.pi = None
+        self.dist = float('inf')
+        self.adj_list = adj_list
+        if not adj_list:
+            self.adj_list = []
+
+    def add_edge(self, node):
+        if node.name not in self.adj_list:
+            self.adj_list.append(node.name)
+
+    def remove_edge(self, node):
+        self.adj_list.remove(node.name)
+
+    def to_string(self):
+        res = self.name + ': [' + ' '.join(self.adj_list) + '] color: ' + self.color + ' dist: ' + str(self.dist)
+        if not self.pi:
+            res += ' pi: Nil'
+        else:
+            res += ' pi: ' + self.pi
+        return res
+
+class Graph:
+
+    def __init__(self, nodes={}):
+        self.nodes = nodes
+
+    def add_node(self,node):
+        self.nodes[node.name] = node
+
+    def add_edge(self,n1,n2):
+        self.nodes[n1].add_edge(self.nodes[n2])
+
+    def remove_edge(self, n1, n2):
+        self.nodes[n1].remove_edge(self.nodes[n2])
+
+    def to_string(self):
+        res = ""
+        for n in self.nodes.keys():
+            res += self.nodes[n].to_string() + ", "
+        return res
+
+    def color(self,node,color):
+        if node.name in self.nodes:
+            self.nodes[node.name].color = color
+
+    def distance(self,node,distance):
+        if node.name in self.nodes:
+            self.nodes[node.name].dist = distance
+
+    def parent(self,node,p):
+        if node.name in self.nodes:
+            self.nodes[node.name].pi = p
+
+g = Graph({})
+g.add_node(Node('r', ['s','v']))
+g.add_node(Node('s', ['r','w']))
+g.add_node(Node('t', ['w','x','u']))
+g.add_node(Node('u', ['t','x','y']))
+g.add_node(Node('v', ['r']))
+g.add_node(Node('w', ['s','t','x']))
+g.add_node(Node('x', ['w','t','u','y']))
+g.add_node(Node('y', ['u','x']))
+
+print(g.to_string())
+
+S = Node('s', ['r','w'])
+
+def enqueue(Q,s):
+    Q.append(s)
+
+def dequeue(Q):
+    return Q.pop(0)
+
+def bfs(G,s):
+    G.color(s,Node.GRAY)
+    G.distance(s,0)
+    G.parent(s,None)
+    Q = []
+    enqueue(Q,s)
+    while Q != None:
+        u = dequeue(Q)
+        for name_v in u.adj_list:
+            v = G.nodes[name_v]
+            G.color(v,Node.GRAY)
+            G.distance(v,u.dist + 1)
+            G.parent(v,u)
+            enqueue(Q,v)
+        u.color = node.BLACK
+
+
+
+
+
+#
+# bfs(g,S)
+#
+# Q = []
+# enqueue(g,Q,S)
+# print(Q)
+
+
+
+
+#print(g.to_string())
