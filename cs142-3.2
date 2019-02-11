@@ -1,0 +1,96 @@
+#NFA
+import threading
+
+def state2(s):
+    tname = threading.currentThread().getName()
+    print('\t',tname, 'enters state 2 with s=',s)
+    n = len(s)
+    if s[0] == '0' and n > 1:
+        state3(s[1:n])
+
+def state3(s):
+    tname = threading.currentThread().getName()
+    print('\t',tname, 'enters state 3 with s=',s)
+    if s[0] == '1':
+        # Mach1 reaches an accept state of 4 and prints its thread id
+        tname = threading.currentThread().getName()
+        print('******',tname, 'reached accept state 4 ***')
+
+def Mach1(s):
+    n=len(s)
+    threads=[]
+    print('Mach1 computes input string',s)
+    for i in range(n):
+        if s[i] == '1':      # if mach1 has read a '1';
+                             # one parallel branch goes to state 2,
+                             # another parallel branch goes to state 3,
+                             # and the third branch stays in state 1(same loop)
+            print('\t Mach1 spliting computation with input :',s[i:n],'in three branches')
+            t2 = threading.Thread(target=state2, args=[s[i+1:]])
+            threads.append(t2.name)
+            t2.start()
+
+            t3 = threading.Thread(target=state3, args=[s[i+1:]])
+            threads.append(t3.name)
+            t3.start()
+
+        elif s[i] == '0':      # if mach1 has read a 0 it stays in state 1
+            print('\t Mach1 continues computation wiht input:',s[i+1:n],'on a single branch')
+
+s = '010110'
+Mach1(s)
+
+
+def s1(inp):
+    threads = []
+    n = len(inp)
+    for i in range(n):
+        if inp[i] == 'a':
+            t2 = threading.Thread(target=s2, args=[s[1:]])
+            threads.append(t2.name)
+            t2.start()
+
+        elif inp[i] == 'b':
+            s2(inp[i+1:])
+
+def s2(inp):
+    if inp:
+        if inp[0] == 'b':
+            s1(inp[1:])
+        else:
+            return
+
+#DFA
+def s0(i):
+    if i:
+        s0(i[1:])
+    else:
+        print('Reject')
+
+def s1(i):
+    if i:
+        if i[0] == 'a':
+            s12(i[1:])
+        else:
+            s2(i[1:])
+    else:
+        print('Accept')
+
+def s2(i):
+    if i:
+        if i[0] == 'a':
+            s0(i[1:])
+        else:
+            s1(i[1:])
+    else:
+        print('Reject')
+
+def s12(i):
+    if i:
+        s12(i[1:])
+    else:
+        print('Accept')
+
+
+
+#DFA
